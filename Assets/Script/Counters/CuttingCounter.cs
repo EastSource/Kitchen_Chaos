@@ -42,7 +42,13 @@ public class CuttingCounter : BaseCounter, IHasProcess
             }
             else
             {
-
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchinObject plateKitchinObject))
+                {
+                    if (plateKitchinObject.TryAddIngredient(GetKitchenObject().GetKitchinObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
             }
         }
     }
@@ -62,7 +68,7 @@ public class CuttingCounter : BaseCounter, IHasProcess
             {
                 KitchinObjectSO outputKitchenObjectSO = GetOutputForInput(GetKitchenObject().GetKitchinObjectSO());
 
-                GetKitchenObject().DestroyMyself();
+                GetKitchenObject().DestroySelf();
 
                 KitchinObject.SpawnKitchinObject(outputKitchenObjectSO, this);
             }
