@@ -34,12 +34,26 @@ public class KitchinObject : MonoBehaviour
         return kitchenObjectParent;
     }
 
-    public void DestroyMyself()
+    public void DestroySelf()
     {
         kitchenObjectParent.ClearKitchenObject();
         Destroy(gameObject);
     }
 
+    public bool TryGetPlate(out PlateKitchinObject plateKitchinObject)
+    {
+        if (this is PlateKitchinObject)
+        {
+            plateKitchinObject = this as PlateKitchinObject;
+            return true;
+        }
+        else
+        {
+            plateKitchinObject = null;
+            return false;
+        }
+    }
+    
     public static KitchinObject SpawnKitchinObject(KitchinObjectSO kitchinObjectSO, IKitchenObjectParent kitchenObjectParent)
     {
         Transform KitchenObjectTransform = Instantiate(kitchinObjectSO.prefab);

@@ -49,7 +49,7 @@ public class StoveCounter : BaseCounter, IHasProcess
                     OnProgressChanged?.Invoke(this, new IHasProcess.OnProgressChangedEventArgs(){progressNormalized = fryingTimer / fryingRecipeSO.flyingTimerMax});
                     if (fryingTimer > fryingRecipeSO.flyingTimerMax)
                     {
-                        GetKitchenObject().DestroyMyself();
+                        GetKitchenObject().DestroySelf();
 
                         KitchinObject.SpawnKitchinObject(fryingRecipeSO.output, this);
                         state = State.Fried;
@@ -63,7 +63,7 @@ public class StoveCounter : BaseCounter, IHasProcess
                     OnProgressChanged?.Invoke(this, new IHasProcess.OnProgressChangedEventArgs(){progressNormalized = burningTimer / burningRecipeSO.burningTimerMax});
                     if (burningTimer > burningRecipeSO.burningTimerMax)
                     {
-                        GetKitchenObject().DestroyMyself();
+                        GetKitchenObject().DestroySelf();
 
                         KitchinObject.SpawnKitchinObject(burningRecipeSO.output, this);
                         state = State.Burned;
@@ -119,7 +119,17 @@ public class StoveCounter : BaseCounter, IHasProcess
             }
             else
             {
-
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchinObject plateKitchinObject))
+                {
+                    if (plateKitchinObject.TryAddIngredient(GetKitchenObject().GetKitchinObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
+                
+                state = State.Idle;
+                OnstateChanged?.Invoke(this, new OnstateChangedEventArgs() { state = state });
+                OnProgressChanged?.Invoke(this, new IHasProcess.OnProgressChangedEventArgs(){progressNormalized = 0f});
             }
         }
     }
