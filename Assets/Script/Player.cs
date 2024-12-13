@@ -7,6 +7,8 @@ using UnityEngine.Serialization;
 public class Player : MonoBehaviour, IKitchenObjectParent
 {
     public static Player Instance { get; private set; }
+
+    public event EventHandler OnPickedSomething;
     public event EventHandler<OnSelectedCounterChanvedEventArgs> OnSeleCtedCounterChanged;
     public class OnSelectedCounterChanvedEventArgs : EventArgs
     {
@@ -157,6 +159,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     public void SetKitchenObject(KitchinObject kitchinObject)
     {
         this.kitchenObject = kitchinObject;
+        if (kitchinObject != null)
+        {
+            OnPickedSomething?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public KitchinObject GetKitchenObject()
