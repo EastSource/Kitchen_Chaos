@@ -37,3 +37,4 @@ public class MusicManager : MonoBehaviour
         return volume;
     }
 }
+
